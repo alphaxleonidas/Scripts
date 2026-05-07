@@ -39,7 +39,8 @@ Requirements: Violentmonkey or TamperMonkey or any other script manager
 ## [RIP Linkvertise](https://trw.lat/install/userscript/u.user.js)
 
 
-## [TimeHooker](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/timehooker.user.js)
+## [TimeHooker](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/timehooker.user.js) 
+// Requires: [Everything-Hook](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/Everything-Hook.user.js)
 
 
 ## [BypassCity](https://trw.lat/install/userscript/u.user.js)
