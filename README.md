@@ -45,7 +45,8 @@ Requirements: Violentmonkey or TamperMonkey or any other script manager
 ## [BypassCity](https://trw.lat/install/userscript/u.user.js)
 
 
-## [AdBypasserLite](https://adsbypasser.github.io/releases/adsbypasser.lite.user.js)   // Lite edition removes image-hosting site support from Full edition.
+## [AdBypasserLite](https://adsbypasser.github.io/releases/adsbypasser.lite.user.js)   
+      // Lite edition removes image-hosting site support from Full edition.
 
 
 ## [AdBypasserFull](https://adsbypasser.github.io/releases/adsbypasser.full.user.js)
