@@ -3,4 +3,9 @@ Bypasses Uploadhaven time restriction
 
 
 
-# One Click Installation: [Install](https://github.com/alphaxleonidas/UploadHEaven/raw/refs/heads/main/UploadHEaven.user.js)
+# One Click Installation: 
+
+# [UploadHEaven](https://github.com/alphaxleonidas/UploadHEaven/raw/refs/heads/main/UploadHEaven.user.js)
+
+
+# [Bypassfreedlinkcountdown](https://github.com/alphaxleonidas/UploadHEaven/raw/refs/heads/main/bypassfreedlink.user.js)
