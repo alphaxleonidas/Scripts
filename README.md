@@ -1,6 +1,4 @@
-# UploadHEaven
-Bypasses Uploadhaven time restriction
-
+# Scripts:
 
 
 # One Click Installation: 
