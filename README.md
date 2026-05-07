@@ -40,7 +40,10 @@ Requirements: Violentmonkey or TamperMonkey or any other script manager
 
 
 ## [TimeHooker](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/timehooker.user.js) 
-      Requires: [Everything-Hook](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/Everything-Hook.user.js)
+
+      Requires: Everything-Hook
+
+## [Everything-Hook](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/Everything-Hook.user.js)
 
 
 ## [BypassCity](https://trw.lat/install/userscript/u.user.js)
