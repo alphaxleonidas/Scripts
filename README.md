@@ -3,55 +3,55 @@
 Requirements: Violentmonkey or TamperMonkey or any other script manager
 
 
-## One Click Installations: 
+# One Click Installations: 
 
 
-# [UploadHEaven](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/UploadHEaven.user.js)
+## [UploadHEaven](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/UploadHEaven.user.js)
 
 
-# [Bypassfreedlinkcountdown](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/bypassfreedlink.user.js)
+## [Bypassfreedlinkcountdown](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/bypassfreedlink.user.js)
 
 
-# [NexusDownloadCollection](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/nexusdownloadcollection.user.js)
+## [NexusDownloadCollection](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/nexusdownloadcollection.user.js)
 
 
-# [NexusNoWait](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/nexusnowait.user.js)
+## [NexusNoWait](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/nexusnowait.user.js)
 
 
-# [Instagram-to-Imginn](https://github.com/alphaxleonidas/Instagram-to-Imginn/raw/refs/heads/main/insta-to-imginn.user.js)
+## [Instagram-to-Imginn](https://github.com/alphaxleonidas/Instagram-to-Imginn/raw/refs/heads/main/insta-to-imginn.user.js)
 
 
-# [X/Twitter-to-Nitter](https://github.com/alphaxleonidas/Twitter-to-Nitter/raw/refs/heads/main/twitter-to-nitter.user.js)
+## [X/Twitter-to-Nitter](https://github.com/alphaxleonidas/Twitter-to-Nitter/raw/refs/heads/main/twitter-to-nitter.user.js)
 
 
-## Bypass Scripts:
+# Bypass Scripts:
 
 
-# [Bypass All Shortlinks Debloated](https://codeberg.org/gongchandang49/bypass-all-shortlinks-debloated/raw/branch/main/Bypass_All_Shortlinks.user.js)
+## [Bypass All Shortlinks Debloated](https://codeberg.org/gongchandang49/bypass-all-shortlinks-debloated/raw/branch/main/Bypass_All_Shortlinks.user.js)
 
 
-# [Evade: Ad-Links Bypasser](https://skipped.lol/evade/evade.user.js)
+## [Evade: Ad-Links Bypasser](https://skipped.lol/evade/evade.user.js)
 
 
-# [Bypass.vip](https://github.com/bypass-vip/userscript/raw/refs/heads/main/bypass-vip.user.js)
+## [Bypass.vip](https://github.com/bypass-vip/userscript/raw/refs/heads/main/bypass-vip.user.js)
 
 
-# [RIP Linkvertise](https://trw.lat/install/userscript/u.user.js)
+## [RIP Linkvertise](https://trw.lat/install/userscript/u.user.js)
 
 
-# [TimeHooker](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/timehooker.user.js)
+## [TimeHooker](https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/timehooker.user.js)
 
 
-# [BypassCity](https://trw.lat/install/userscript/u.user.js)
+## [BypassCity](https://trw.lat/install/userscript/u.user.js)
 
 
-# [AdBypasserLite](https://adsbypasser.github.io/releases/adsbypasser.lite.user.js)   // Lite edition removes image-hosting site support from Full edition.
+## [AdBypasserLite](https://adsbypasser.github.io/releases/adsbypasser.lite.user.js)   // Lite edition removes image-hosting site support from Full edition.
 
 
-# [AdBypasserFull](https://adsbypasser.github.io/releases/adsbypasser.full.user.js)
+## [AdBypasserFull](https://adsbypasser.github.io/releases/adsbypasser.full.user.js)
 
 
-# [Yuumari](https://api.yuumari.com/dl/m-links.user.js)
+## [Yuumari](https://api.yuumari.com/dl/m-links.user.js)
 
 
 
