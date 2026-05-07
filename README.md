@@ -23,7 +23,8 @@ Requirements: Violentmonkey or TamperMonkey or any other script manager
 
 # [X/Twitter-to-Nitter](https://github.com/alphaxleonidas/Twitter-to-Nitter/raw/refs/heads/main/twitter-to-nitter.user.js)
 
-# Bypass Scripts:
+
+## Bypass Scripts:
 
 
 # [Bypass All Shortlinks Debloated](https://codeberg.org/gongchandang49/bypass-all-shortlinks-debloated/raw/branch/main/Bypass_All_Shortlinks.user.js)
