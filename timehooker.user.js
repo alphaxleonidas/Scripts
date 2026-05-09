@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name            计时器掌控者|视频广告跳过|视频广告加速器
+// @name            Timer Controller | Video Ad Skip | Video Ad Accelerator
 // @name:en         TimerHooker
 // @namespace       https://gitee.com/HGJing/everthing-hook/
 // @version         1.0.62
-// @description     控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
+// @description     Control webpage timer speed | Speed ​​up skipping timed ads | Fast forward (slow down) videos | Skip ads | Supports almost all webpages.
 // @description:en  it can hook the timer speed to change.
 // @include         *
 // @require         https://github.com/alphaxleonidas/Scripts/raw/refs/heads/main/Everything-Hook.user.js
-// @author          Cangshi
+// @author          Leonidas
 // @match           http://*/*
 // @run-at          document-start
 // @grant           none
@@ -50,7 +50,7 @@ document.addEventListener('readystatechange', function () {
 
                 var displayNum = (1 / timerContext._percentage).toFixed(2);
 
-                // 在页面左边添加一个半圆便于修改
+                // Add a semicircle on the left side of the page for easier modification.
                 var html = '<div class="_th-container">\n' +
                     '    <div class="_th-click-hover _item-input">\n' +
                     '        x' + displayNum + '\n' +
@@ -122,7 +122,7 @@ document.addEventListener('readystatechange', function () {
                 }
             },
             applyGlobalAction: function (timer) {
-                // 界面半圆按钮点击的方法
+                // How to click the semi-circular button on the interface
                 timer.changeTime = function (anum, cnum, isa, isr) {
                     if (isr) {
                         global.timer.change(1);
@@ -133,17 +133,17 @@ document.addEventListener('readystatechange', function () {
                     }
                     var result;
                     if (!anum && !cnum) {
-                        var t = prompt("输入欲改变计时器变化倍率（当前：" + 1 / timerContext._percentage + "）");
+                        var t = prompt("Input the desired change rate of the timer（Current：" + 1 / timerContext._percentage + "）");
                         if (t == null) {
                             return;
                         }
                         if (isNaN(parseFloat(t))) {
-                            alert("请输入正确的数字");
+                            alert("Please enter the correct number");
                             timer.changeTime();
                             return;
                         }
                         if (parseFloat(t) <= 0) {
-                            alert("倍率不能小于等于0");
+                            alert("The multiplier cannot be less than or equal to 0.");
                             timer.changeTime();
                             return;
                         }
@@ -167,19 +167,19 @@ document.addEventListener('readystatechange', function () {
             },
             applyHooking: function () {
                 var _this = this;
-                // 劫持循环计时器
+                // Hijacking the loop timer
                 eHookContext.hookReplace(window, 'setInterval', function (setInterval) {
                     return _this.getHookedTimerFunction('interval', setInterval);
                 });
-                // 劫持单次计时
+                // Hijacking single timer
                 eHookContext.hookReplace(window, 'setTimeout', function (setTimeout) {
                     return _this.getHookedTimerFunction('timeout', setTimeout)
                 });
-                // 劫持循环计时器的清除方法
+                // Methods to clear a hijacked loop timer
                 eHookContext.hookBefore(window, 'clearInterval', function (method, args) {
                     _this.redirectNewestId(args);
                 });
-                // 劫持循环计时器的清除方法
+                // Methods to clear a hijacked loop timer
                 eHookContext.hookBefore(window, 'clearTimeout', function (method, args) {
                     _this.redirectNewestId(args);
                 });
@@ -310,12 +310,12 @@ document.addEventListener('readystatechange', function () {
                             return returnValue;
                         }
                     }
-                    // 储存原始时间间隔
+                    // Store original time interval
                     var originMS = arguments[1];
-                    // 获取变速时间间隔
+                    // Obtain the speed change time interval
                     arguments[1] *= timerContext._percentage;
                     var resultId = timer.apply(window, arguments);
-                    // 保存每次使用计时器得到的id以及参数等
+                    // Save the ID and parameters obtained each time the timer is used.
                     timerContext[property][resultId] = {
                         args: arguments,
                         originMS: originMS,
@@ -332,17 +332,17 @@ document.addEventListener('readystatechange', function () {
                 var id = args[0];
                 if (timerContext._intervalIds[id]) {
                     args[0] = timerContext._intervalIds[id].nowId;
-                    // 清除该记录id
+                    // Clear this record ID
                     delete timerContext._intervalIds[id];
                 }
                 if (timerContext._timeoutIds[id]) {
                     args[0] = timerContext._timeoutIds[id].nowId;
-                    // 清除该记录id
+                    // Clear this record ID
                     delete timerContext._timeoutIds[id];
                 }
             },
             registerShortcutKeys: function (timer) {
-                // 快捷键注册
+                // Shortcut key registration
                 addEventListener('keydown', function (e) {
                     switch (e.keyCode) {
                         case 57:
@@ -389,20 +389,20 @@ document.addEventListener('readystatechange', function () {
                 });
             },
             /**
-             * 当计时器速率被改变时调用的回调方法
+             * The callback method is invoked when the timer rate is changed.
              * @param percentage
              * @private
              */
             percentageChangeHandler: function (percentage) {
-                // 改变所有的循环计时
+                // Change all loop timings
                 util.ergodicObject(timerContext, timerContext._intervalIds, function (idObj, id) {
                     idObj.args[1] = Math.floor((idObj.originMS || 1) * percentage);
-                    // 结束原来的计时器
+                    // End the original timer
                     this._clearInterval.call(window, idObj.nowId);
-                    // 新开一个计时器
+                    // Start a new timer
                     idObj.nowId = this._setInterval.apply(window, idObj.args);
                 });
-                // 改变所有的延时计时
+                // Change all delay timings
                 util.ergodicObject(timerContext, timerContext._timeoutIds, function (idObj, id) {
                     var now = this._Date.now();
                     var exceptTime = idObj.exceptNextFireTime;
@@ -413,12 +413,12 @@ document.addEventListener('readystatechange', function () {
                     }
                     var changedTime = Math.floor(percentage / oldPercentage * time);
                     idObj.args[1] = changedTime;
-                    // 重定下次执行时间
+                    // Reschedule the next execution time
                     idObj.exceptNextFireTime = now + changedTime;
                     idObj.oldPercentage = percentage;
-                    // 结束原来的计时器
+                    // End the original timer
                     this._clearTimeout.call(window, idObj.nowId);
-                    // 新开一个计时器
+                    // Start a new timer
                     idObj.nowId = this._setTimeout.apply(window, idObj.args);
                 });
             },
@@ -462,7 +462,7 @@ document.addEventListener('readystatechange', function () {
                 }
                 if (target instanceof HTMLVideoElement && key === 'playbackRate') {
                     option.configurable = true;
-                    console.warn('[Timer Hook]', '已阻止默认操作视频倍率');
+                    console.warn('[Timer Hook]', 'Default video zoom has been blocked.');
                     key = 'playbackRate_hooked'
                 }
                 return [target, key, option];
@@ -564,13 +564,13 @@ document.addEventListener('readystatechange', function () {
             });
             var eHookContext = this;
             var timerHooker = {
-                // 用于储存计时器的id和参数
+                // Used to store the timer's ID and parameters
                 _intervalIds: {},
                 _timeoutIds: {},
                 _auoUniqueId: 1,
-                // 计时器速率
+                // timer rate
                 __percentage: 1.0,
-                // 劫持前的原始的方法
+                // primitive methods before hijacking
                 _setInterval: window['setInterval'],
                 _clearInterval: window['clearInterval'],
                 _clearTimeout: window['clearTimeout'],
@@ -587,7 +587,7 @@ document.addEventListener('readystatechange', function () {
                 notifyExec: function (uniqueId) {
                     var _this = this;
                     if (uniqueId) {
-                        // 清除 timeout 所储存的记录
+                        // Clear the records stored by the timeout.
                         var timeoutInfos = Object.values(this._timeoutIds).filter(
                             function (info) {
                                 return info.uniqueId === uniqueId;
@@ -601,7 +601,7 @@ document.addEventListener('readystatechange', function () {
                     // console.log(uniqueId, 'called')
                 },
                 /**
-                 * 初始化方法
+                 * Initialization method
                  */
                 init: function () {
                     var timerContext = this;
@@ -610,7 +610,7 @@ document.addEventListener('readystatechange', function () {
                     h.hookDefine();
                     h.applyHooking();
 
-                    // 设定百分比属性被修改的回调
+                    // Set a callback when the percentage property is modified.
                     Object.defineProperty(timerContext, '_percentage', {
                         get: function () {
                             return timerContext.__percentage;
@@ -639,7 +639,7 @@ document.addEventListener('readystatechange', function () {
                     }
                 },
                 /**
-                 * 调用该方法改变计时器速率
+                 * Calling this method changes the timer rate
                  * @param percentage
                  */
                 change: function (percentage) {
@@ -673,7 +673,7 @@ document.addEventListener('readystatechange', function () {
                     }
                 }
             };
-            // 默认初始化
+            // Default initialization
             timerHooker.init();
             return timerHooker;
         }
@@ -683,7 +683,7 @@ document.addEventListener('readystatechange', function () {
         global.eHook.plugins({
             name: 'timer',
             /**
-             * 插件装载
+             * Plug-in loading
              * @param util
              */
             mount: generate()
