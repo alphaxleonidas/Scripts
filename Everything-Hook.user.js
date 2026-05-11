@@ -5,7 +5,7 @@
 // @version      0.5.9056
 // @include      *
 // @description  it can hook everything
-// @author       Cangshi
+// @author       Leonidas
 // @match        http://*/*
 // @grant        none
 // @run-at       document-start
