@@ -81,7 +81,7 @@ const eUtils = __webpack_require__(1);
     };
     EHook.prototype = {
         /**
-         * 获取一个对象的劫持id，若没有则创建一个
+         * Get the hijacking ID of an object; create it if it doesn't exist.
          * @param context
          * @return {*}
          * @private
@@ -101,7 +101,7 @@ const eUtils = __webpack_require__(1);
             return hookedId;
         },
         /**
-         * 获取一个对象的劫持方法映射，若没有则创建一个
+         * Retrieve a hijacking method mapping for an object; create one if it doesn't exist.
          * @param context
          * @return {*}
          * @private
@@ -116,7 +116,7 @@ const eUtils = __webpack_require__(1);
             return thisTask;
         },
         /**
-         * 获取对应方法的hook原型任务对象，若没有则初始化一个。
+         * Get the hook prototype task object for the corresponding method; if it doesn't exist, initialize one.
          * @param context
          * @param methodName
          * @private
@@ -138,7 +138,7 @@ const eUtils = __webpack_require__(1);
             return thisMethod;
         },
         /**
-         * 执行多个方法并注入一个方法和参数集合
+         * Execute multiple methods and inject a method and parameter set.
          * @param context
          * @param methods
          * @param args
@@ -162,7 +162,7 @@ const eUtils = __webpack_require__(1);
             return result;
         },
         /**
-         * 生成和替换劫持方法
+         * Generate and replace hijacking methods
          * @param parent
          * @param context
          * @param methodName {string}
@@ -182,7 +182,7 @@ const eUtils = __webpack_require__(1);
                 return;
             }
             var invokeMethods = this._invokeMethods;
-            // 组装劫持函数
+            // Assemble the hijacking function
             var builder = new utils.FunctionBuilder(function (v) {
                 return {
                     result: undefined
@@ -238,7 +238,7 @@ const eUtils = __webpack_require__(1);
             //     methodStr = methodStr + 'var r = invokeMethods(context, methodTask.task.after, args);result = (r!=null?r:result);\n';
             // }
             // methodStr = methodStr + 'return result;\n})';
-            // 绑定劫持函数
+            // Binding hijacking function
             var resultFunc = builder.result();
             for (var proxyName in methodTask.original) {
                 Object.defineProperty(resultFunc, proxyName, {
@@ -254,16 +254,16 @@ const eUtils = __webpack_require__(1);
             parent[methodName] = resultFunc;
         },
         /**
-         * 劫持一个方法
+         * Hijack a method
          * @inner
          * @memberOf EHook
-         * @param parent{Object} 指定方法所在的对象
-         * @param methodName{String} 指定方法的名称
-         * @param config{Object} 劫持的配置对象
+         * @param parent{Object} The object containing the specified method
+         * @param methodName{String} Specify the name of the method
+         * @param config{Object} Hijacked configuration object
          */
         hook: function (parent, methodName, config) {
             var hookedFailure = -1;
-            // 调用方法的上下文
+            // The context of calling the method
             var context = config.context !== undefined ? config.context : parent;
             if (parent[methodName] == null) {
                 parent[methodName] = function () {
@@ -311,15 +311,15 @@ const eUtils = __webpack_require__(1);
  
         },
         /**
-         * 劫持替换一个方法
-         * @see 注意：该方法会覆盖指定劫持方法在之前所进行的一切劫持，也不能重复使用，并且不和hookAfter,hookCurrent,hookBefore共存，在同时使用的情况下，优先使用hookReplace而不是其他的方法
+         * Hijacking and replacing a method
+         * @see Note: This method will override all previous hijacking operations performed by the specified hijacking method, cannot be reused, and cannot coexist with hookAfter, hookCurrent, and hookBefore. When used simultaneously, hookReplace takes precedence over other methods.
          * @inner
          * @memberOf EHook
-         * @param parent{Object} 指定方法所在的对象
-         * @param context{Object=} 回调方法的上下文
-         * @param methodName{String} 指定方法的名称
-         * @param replace {function} 回调方法，该方法的返回值便是替换的方法 回调参数及返回值：[ method:指定的原方法，类型:function return:规定被替换的方法内容，类型:function ]
-         * @return {number} 该次劫持的id
+         * @param parent{Object} The object containing the specified method
+         * @param context{Object=} Context of callback method
+         * @param methodName{String} Specify the name of the method
+         * @param replace {function} The callback method, whose return value is the replacement method. Callback parameters and return value: [method: the original method, type: function; return: the content of the method to be replaced, type: function]
+         * @return {number} The ID used in this hijacking
          */
         hookReplace: function (parent, methodName, replace, context) {
             return this.hook(parent, methodName, {
@@ -328,14 +328,14 @@ const eUtils = __webpack_require__(1);
             });
         },
         /**
-         * 在指定方法前执行
+         * Execute before the specified method
          * @inner
          * @memberOf EHook
-         * @param parent{Object} 指定方法所在的对象
-         * @param methodName{String} 指定方法的名称
-         * @param before{function} 回调方法，该方法在指定方法运行前执行 回调参数：[ method:指定的原方法 args:原方法运行的参数（在此改变参数值会影响后续指定方法的参数值） ]
-         * @param context{Object=} 回调方法的上下文
-         * @returns {number} 劫持id（用于解除劫持）
+         * @param parent{Object} The object containing the specified method
+         * @param methodName{String} Specify the name of the method
+         * @param before{function} Callback method, which is executed before the specified method runs. Callback parameters: [method: the specified original method; args: the parameters to be executed in the original method (changing the parameter values ​​here will affect the parameter values ​​of the subsequent specified method)]
+         * @param context{Object=} Context of callback method
+         * @returns {number} hijack id（Used to remove hijacking）
          */
         hookBefore: function (parent, methodName, before, context) {
             return this.hook(parent, methodName, {
@@ -344,15 +344,15 @@ const eUtils = __webpack_require__(1);
             });
         },
         /**
-         * 劫持方法的运行，在对制定方法进行该劫持的时候，指定方法不会主动执行，替换为执行参数中的current方法
-         * @see 注意：该方法只能对指定方法进行一次劫持，若再次使用该方法劫持就会覆盖之前的劫持[可以和hookBefore,hookAfter共存，且hookBefore和hookAfter可以对同个指定方法多次劫持]
+         * When a method is hijacked, it will not execute automatically; instead, the `current` method specified in the parameters will be executed.
+         * @see Note: This method can only hijack the specified method once. If this method is used again, it will overwrite the previous hijacking. [It can coexist with hookBefore and hookAfter, and hookBefore and hookAfter can hijack the same specified method multiple times.]
          * @inner
          * @memberOf EHook
-         * @param parent{Object} 指定方法所在的对象
-         * @param methodName{String} 指定方法的名称
-         * @param current{function} 回调方法，该方法在指定方法被调用时执行 回调参数及返回值：[ parent:指定方法所在的对象，类型:object method:指定的原方法，类型:function args:原方法的参数，类型:array return:规定被劫持方法的返回值，类型:* ]
-         * @param context{Object=} 回调方法的上下文
-         * @returns {number} 劫持id（用于解除劫持）
+         * @param parent{Object} The object containing the specified method
+         * @param methodName{String} Specify the name of the method
+         * @param current{function} A callback method that executes when the specified method is invoked. Callback parameters and return value: [parent: the object containing the specified method, type: object; method: the original method, type: function; args: the parameters of the original method, type: array; return: the return value of the hijacked method, type: *]
+         * @param context{Object=} Context of callback method
+         * @returns {number} Hijacking ID (used to unhijack)
          */
         hookCurrent: function (parent, methodName, current, context) {
             return this.hook(parent, methodName, {
@@ -361,14 +361,14 @@ const eUtils = __webpack_require__(1);
             });
         },
         /**
-         * 在指定方法后执行
+         * Execute after the specified method
          * @inner
          * @memberOf EHook
-         * @param parent{Object} 指定方法所在的对象
-         * @param methodName{String} 指定方法的名称
-         * @param after{function} 回调方法，该方法在指定方法运行后执行 回调参数及返回值：[ method:指定的原方法，类型:function args:原方法的参数，类型:array result:原方法的返回值，类型:* return:规定被劫持方法的返回值，类型:* ]
-         * @param context{Object=} 回调方法的上下文
-         * @returns {number} 劫持id（用于解除劫持）
+         * @param parent{Object} The object containing the specified method
+         * @param methodName{String} Specify the name of the method
+         * @param after{function} Callback method, executed after the specified method runs. Callback parameters and return value: [ method: the original method, type: function; args: the parameters of the original method, type: array; result: the return value of the original method, type: *; return: the return value of the hijacked method, type: *]
+         * @param context{Object=} Context of callback method
+         * @returns {number} Hijacking ID (used to unhijack)
          */
         hookAfter: function (parent, methodName, after, context) {
             return this.hook(parent, methodName, {
@@ -448,11 +448,11 @@ const eUtils = __webpack_require__(1);
             })
         },
         /**
-         * 劫持全局ajax
+         * Hijacking global AJAX
          * @inner
          * @memberOf EHook
-         * @param methods {object} 劫持的方法
-         * @return {*|number} 劫持的id
+         * @param methods {object} Hijacking method
+         * @return {*|number} hijacked ID
          */
         hookAjax: function (methods) {
             if (this.isHooked(_global, 'XMLHttpRequest')) {
@@ -461,10 +461,10 @@ const eUtils = __webpack_require__(1);
             var _this = this;
             var hookMethod = function (methodName) {
                 if (utils.isFunction(methods[methodName])) {
-                    // 在执行方法之前hook原方法
+                    // Hook the original method before executing the method.
                     _this.hookBefore(this.xhr, methodName, methods[methodName]);
                 }
-                // 返回方法调用内部的xhr
+                // The return method calls the internal xhr
                 return this.xhr[methodName].bind(this.xhr);
             };
             var getProperty = function (attr) {
@@ -484,7 +484,7 @@ const eUtils = __webpack_require__(1);
                         xhr[attr] = function () {
                             f.apply(xhr, arguments);
                         };
-                        // on方法在set时劫持
+                        // The on method is hijacked during set.
                         _this.hookBefore(xhr, attr, methods[attr]);
                         // console.log(1,attr);
                         // xhr[attr] = function () {
@@ -510,7 +510,7 @@ const eUtils = __webpack_require__(1);
                             });
                         }
                     }
-                    // 定义外部xhr可以在内部访问
+                    // Define an external xhr that can be accessed internally.
                     this.xhr.xhr = this;
                 };
                 _this.hookedToProperties(XMLHttpRequest, resFunc, true);
@@ -519,9 +519,9 @@ const eUtils = __webpack_require__(1);
             });
         },
         /**
-         * 劫持全局ajax
-         * @param methods {object} 劫持的方法
-         * @return {*|number} 劫持的id
+         * Hijacking global AJAX
+         * @param methods {object} Hijacking method
+         * @return {*|number} hijacked ID
          */
         hookAjaxV2: function (methods) {
             this.hookClass(window, 'XMLHttpRequest', function () {
@@ -532,13 +532,13 @@ const eUtils = __webpack_require__(1);
             });
         },
         /**
-         * 解除劫持
+         * Unhijack
          * @inner
          * @memberOf EHook
-         * @param context 上下文
-         * @param methodName 方法名
-         * @param isDeeply {boolean=} 是否深度解除[默认为false]
-         * @param eqId {number=}  解除指定id的劫持[可选]
+         * @param context context
+         * @param methodName method name
+         * @param isDeeply {boolean=} Whether to perform a deep unblocking [default is false]
+         * @param eqId {number=}  Unblock the specified ID [Optional]
          */
         unHook: function (context, methodName, isDeeply, eqId) {
             if (!context[methodName] || !utils.isFunction(context[methodName])) {
@@ -560,7 +560,7 @@ const eUtils = __webpack_require__(1);
             }
         },
         /**
-         * 通过Id解除劫持
+         * Unhijacking via ID
          * @inner
          * @memberOf EHook
          * @param eqId
@@ -594,11 +594,11 @@ const eUtils = __webpack_require__(1);
             return hasEq;
         },
         /**
-         *  移除所有劫持相关的方法
+         *  Methods to remove all hijacking-related methods
          * @inner
          * @memberOf EHook
-         * @param context 上下文
-         * @param methodName 方法名
+         * @param context context
+         * @param methodName method name
          */
         removeHookMethod: function (context, methodName) {
             if (!context[methodName] || !utils.isFunction(context[methodName])) {
@@ -615,7 +615,7 @@ const eUtils = __webpack_require__(1);
             };
         },
         /**
-         * 判断一个方法是否被劫持过
+         * Determine if a method has been hijacked
          * @inner
          * @memberOf EHook
          * @param context
@@ -626,7 +626,7 @@ const eUtils = __webpack_require__(1);
             return hookMap[methodName] !== undefined ? (hookMap[methodName].original !== undefined) : false;
         },
         /**
-         * 保护一个对象使之不会被篡改
+         * Protect an object from being tampered with
          * @inner
          * @memberOf EHook
          * @param parent
@@ -650,7 +650,7 @@ const eUtils = __webpack_require__(1);
             }, context)
         },
         /**
-         * 装载插件
+         * Load plugin
          * @inner
          * @memberOf EHook
          * @param option
@@ -685,7 +685,7 @@ const eUtils = __webpack_require__(1);
     };
     AHook.prototype = {
         /**
-         * 执行配置列表中的指定方法组
+         * Execute the specified method group in the configuration list
          * @param xhr
          * @param methodName
          * @param args
@@ -702,7 +702,7 @@ const eUtils = __webpack_require__(1);
             return utils.invokeMethods(xhr, methods, args);
         },
         /**
-         * 根据url获取配置列表
+         * Get the configuration list from the URL
          * @param url
          * @return {Array}
          * @private
@@ -717,7 +717,7 @@ const eUtils = __webpack_require__(1);
             return patcherList;
         },
         /**
-         * 根据xhr对象分发回调请求
+         * Distribute callback requests based on the xhr object.
          * @param xhr
          * @param fullUrl
          * @private
@@ -727,7 +727,7 @@ const eUtils = __webpack_require__(1);
             xhr.patcherList = this._urlPatcher(url);
         },
         /**
-         * 转换响应事件
+         * Conversion response event
          * @param e
          * @param xhr
          * @private
@@ -747,12 +747,12 @@ const eUtils = __webpack_require__(1);
                     }
                 });
             } catch (error) {
-                console.warn('重定义返回事件失败，劫持响应可能失败');
+                console.warn('Redefining the return event failed; the hijacking response may fail.');
             }
             return e;
         },
         /**
-         * 解析open方法的参数
+         * Parsing the parameters of the open method
          * @param args
          * @private
          */
@@ -766,7 +766,7 @@ const eUtils = __webpack_require__(1);
             };
         },
         /**
-         * 劫持ajax 请求参数
+         * Hijacking AJAX request parameters
          * @param argsObject
          * @param argsArray
          * @private
@@ -777,28 +777,28 @@ const eUtils = __webpack_require__(1);
             argsArray[2] = argsObject.async;
         },
         /**
-         * 获取劫持方法的参数 [原方法,原方法参数,原方法返回值]，剔除原方法参数
+         * Get the parameters of the hijacked method [original method, original method parameters, original method return value], and remove the original method parameters.
          * @param args
          * @return {*|Array.<T>}
          * @private
          */
         _getHookedArgs: function (args) {
-            // 将参数中'原方法'剔除
+            // Remove 'original method' from the parameters.
             return Array.prototype.slice.call(args, 0).splice(1);
         },
         /**
-         * 响应被触发时调用的方法
+         * The method called when the response is triggered
          * @param outerXhr
          * @param funcArgs
          * @private
          */
         _onResponse: function (outerXhr, funcArgs) {
-            // 因为参数是被劫持的参数为[method(原方法),args(参数)],该方法直接获取参数并转换为数组
+            // Because the parameters are hijacked and consist of [method(original method), args(parameters)], this method directly obtains the parameters and converts them into an array.
             var args = this._getHookedArgs(funcArgs);
-            args[0][0] = this._parseEvent(args[0][0], outerXhr.xhr); // 强制事件指向外部xhr
-            // 执行所有的名为hookResponse的方法组
+            args[0][0] = this._parseEvent(args[0][0], outerXhr.xhr); // Force events to point to external xhr
+            // Execute all method groups named hookResponse
             var results = this._invokeAimMethods(outerXhr, 'hookResponse', args);
-            // 遍历结果数组并获取最后返回的有效的值作为响应值
+            // Iterate through the result array and retrieve the last valid value as the response value.
             var resultIndex = -1;
             utils.ergodicArrayObject(outerXhr, results, function (res, i) {
                 if (res != null) {
@@ -810,15 +810,15 @@ const eUtils = __webpack_require__(1);
             }
         },
         /**
-         * 手动开始劫持
+         * Manually start hijacking
          * @inner
          * @memberOf AHook
          */
         startHook: function () {
             var _this = this;
             var normalMethods = {
-                // 方法中的this指向内部xhr
-                // 拦截响应
+                // The `this` keyword in a method refers to the inner `xhr` method.
+                // intercept response
                 onreadystatechange: function () {
                     if (this.readyState == 4 && this.status == 200 || this.status == 304) {
                         _this._onResponse(this, arguments);
@@ -827,7 +827,7 @@ const eUtils = __webpack_require__(1);
                 onload: function () {
                     _this._onResponse(this, arguments);
                 },
-                // 拦截请求
+                // intercept request
                 open: function () {
                     var args = _this._getHookedArgs(arguments);
                     var fullUrl = args[0][1];
@@ -843,12 +843,12 @@ const eUtils = __webpack_require__(1);
                     _this._invokeAimMethods(this, 'hookSend', args);
                 }
             };
-            // 设置总的hookId
+            // Set the overall hookId
             this.___hookedId = _global.eHook.hookAjax(normalMethods);
             this.isHooked = true;
         },
         /**
-         * 注册ajaxUrl拦截
+         * Register ajaxUrl interceptor
          * @inner
          * @memberOf AHook
          * @param urlPatcher
@@ -875,18 +875,18 @@ const eUtils = __webpack_require__(1);
             }
             var id = this._getAutoId();
             this._urlDispatcherList.push({
-                // 指定id便于后续取消
+                // Specifying an ID makes it easier to cancel later.
                 id: id,
                 patcher: urlPatcher,
                 config: config
             });
-            // 当注册一个register时，自动开始运行劫持
+            // The hijacking process automatically begins when a register is created.
             if (!this.isHooked) {
                 this.startHook();
             }
             return id;
         }
-        // todo 注销  cancellation: function (registerId){};
+        // todo Log out  cancellation: function (registerId){};
     };
  
     _global['eHook'] = eHook;
@@ -924,14 +924,14 @@ const eUtils = __webpack_require__(1);
  
     var BaseUtils = {
         /**
-         * 对象是否为数组
+         * Is the object an array?
          * @param arr
          */
         isArray: function (arr) {
             return Array.isArray(arr) || Object.prototype.toString.call(arr) === "[object Array]";
         },
         /**
-         * 判断是否为方法
+         * Determine if it is a method
          * @param func
          * @return {boolean}
          */
@@ -942,7 +942,7 @@ const eUtils = __webpack_require__(1);
             return typeof func === 'function';
         },
         /**
-         * 判断是否是一个有效的对象
+         * Determine if it is a valid object
          * @param obj
          * @return {*|boolean}
          */
@@ -957,7 +957,7 @@ const eUtils = __webpack_require__(1);
         },
         uniqueNum: 1000,
         /**
-         * 根据当前时间戳生产一个随机id
+         * Generate a random ID based on the current timestamp.
          * @returns {string}
          */
         buildUniqueId: function () {
@@ -1011,14 +1011,14 @@ const eUtils = __webpack_require__(1);
     factory('DateTimeUtils', ['logger'], function (logger) {
         return {
             /**
-             * 打印当前时间
+             * Print current time
              */
             printNowTime: function () {
                 var date = new Date();
                 console.log(this.pattern(date, 'hh:mm:ss:S'));
             },
             /**
-             * 格式化日期
+             * Format date
              * @param date
              * @param fmt
              * @returns {*}
@@ -1057,7 +1057,7 @@ const eUtils = __webpack_require__(1);
                 return fmt;
             },
             /**
-             * 以当前时间获取id
+             * Get ID using the current time
              * @returns {number}
              */
             getCurrentId: function () {
@@ -1065,10 +1065,10 @@ const eUtils = __webpack_require__(1);
                 return date.getTime();
             },
             /**
-             * 获取指定时间距离现在相差多久
+             * Get the time difference between a specified time and the present.
              * @param date {number|Date}
-             * @param isCeil{boolean=} 是否对结果向上取整，默认[false]
-             * @param type {string=} 单位可取值['day','month','year']默认'day'
+             * @param isCeil{boolean=} Whether to round the result up; the default is [false].
+             * @param type {string=} The unit can take values ​​of ['day', 'month', 'year'], with the default being 'day'.
              * @returns {number}
              */
             getNowBetweenADay: function (date, isCeil, type) {
@@ -1079,13 +1079,13 @@ const eUtils = __webpack_require__(1);
                     date = new Date(date);
                 }
                 if (!(date instanceof Date)) {
-                    throw new TypeError('该参数类型必须是Date')
+                    throw new TypeError('This parameter must be of type Date.')
                 }
                 var time = date.getTime();
                 var now = new Date();
                 var nowTime = now.getTime();
                 if (nowTime - time < 0) {
-                    logger.warn('需要计算的时间必须在当前时间之前');
+                    logger.warn('The time to be calculated must be before the current time.');
                 }
                 var result = 0;
                 switch (type) {
@@ -1123,10 +1123,10 @@ const eUtils = __webpack_require__(1);
                 return BaseUtils.isArray(arr);
             },
             /**
-             * 遍历数组
+             * Traverse array
              * @param context {Object}
              * @param arr {Array}
-             * @param cb {Function} 回调函数
+             * @param cb {Function} callback function
              */
             ergodicArrayObject: function (context, arr, cb) {
                 if (!context) {
@@ -1143,12 +1143,12 @@ const eUtils = __webpack_require__(1);
                 }
             },
             /**
-             * 获取数组对象的一个属性发起动作
+             * Get an action from a property of an array object
              * @param context {Object}
              * @param arr {Array}
              * @param propertyName {String}
              * @param cb {Function}
-             * @param checkProperty {boolean} 是否排除不拥有该属性的对象[default:true]
+             * @param checkProperty {boolean} Exclude objects that do not have this property.[default:true]
              */
             getPropertyDo: function (context, arr, propertyName, cb, checkProperty) {
                 if (checkProperty === null) {
@@ -1161,7 +1161,7 @@ const eUtils = __webpack_require__(1);
                 })
             },
             /**
-             * [私有方法]将多个键值对对象转换为map
+             * [Private method] Converts multiple key-value pair objects into a map.
              * @param arr {Array}
              * @returns {{}}
              */
@@ -1181,7 +1181,7 @@ const eUtils = __webpack_require__(1);
                 return map;
             },
             /**
-             * 获取数组的哈希码
+             * Get the hash code of the array
              * @param arr {Array}
              * @returns {number}
              */
@@ -1197,7 +1197,7 @@ const eUtils = __webpack_require__(1);
                 return hash;
             },
             /**
-             * 通过数组中每个对象的指定属性生成一个新数组
+             * Generate a new array by specifying the properties of each object in the array.
              * @param arr {Array}
              * @param propertyName {String}
              */
@@ -1212,7 +1212,7 @@ const eUtils = __webpack_require__(1);
                 return result;
             },
             /**
-             * 数组对象是否包含一个对象
+             * Does the array object contain an object?
              * @param arr {Array}
              * @param obj
              * @param cb {function=}
@@ -1232,8 +1232,8 @@ const eUtils = __webpack_require__(1);
                 return isContainsObject;
             },
             /**
-             * 获取数组中的最大值
-             * @param arr 若数组中的对象还是数组，则按里面数组的每个对象进行多级比较
+             * Get the maximum value in the array
+             * @param arr If the objects in the array are also arrays, then perform multi-level comparisons for each object in each of the arrays.
              * @param cb
              * @returns {*}
              */
@@ -1244,7 +1244,7 @@ const eUtils = __webpack_require__(1);
                     maxObject = arr[++maxIndex]
                 }
                 for (var i = maxIndex + 1; i < arr.length; i++) {
-                    // 若是比较对象都是数组，则对每个数组的第一个元素进行比较，若相同，则比较第二个元素
+                    // If the objects being compared are arrays, then the first element of each array is compared; if they are the same, the second element is compared.
                     if (maxObject !== null && this.isArrayObject(maxObject) && this.isArrayObject(arr[i])) {
                         var classLength = maxObject.length;
                         var classLevel = 0;
@@ -1269,7 +1269,7 @@ const eUtils = __webpack_require__(1);
                 return maxObject;
             },
             /**
-             * 获取数组中的总值
+             * Get the total value in the array
              * @param arr{Array<number>}
              * @param cb {function=}
              */
@@ -1291,7 +1291,7 @@ const eUtils = __webpack_require__(1);
                 return sum;
             },
             /**
-             * 获取数组中的平均值
+             * Get the average value of an array
              * @param arr{Array<number>}
              */
             getAverageInArray: function (arr) {
@@ -1302,7 +1302,7 @@ const eUtils = __webpack_require__(1);
                 return average;
             },
             /**
-             * 为数组排序
+             * Sort an array
              * @param arr
              * @param order
              * @param sortSetting {object=}
@@ -1315,7 +1315,7 @@ const eUtils = __webpack_require__(1);
                 var ASC = 1;
                 var thisArr = arr.slice(0);
                 var _thisAction = null;
-                // 解析配置
+                // Parse configuration
                 var isSetting = sortSetting && sortSetting.getComparedProperty &&
                     BaseUtils.isFunction(sortSetting.getComparedProperty);
                 if (isSetting) {
@@ -1343,18 +1343,18 @@ const eUtils = __webpack_require__(1);
                 return resultArr;
             },
             /**
-             * 将类数组转化为数组
-             * @param arrLike 类数组对象
+             * Convert an array-like object to an array.
+             * @param arrLike array-like object
              */
             toArray: function (arrLike) {
                 if (!arrLike || arrLike.length === 0) {
                     return [];
                 }
-                // 非伪类对象，直接返回最好
+                // For non-pseudo-class objects, it's best to return them directly.
                 if (!arrLike.length) {
                     return arrLike;
                 }
-                // 针对IE8以前 DOM的COM实现
+                // COM implementation of the DOM prior to IE8
                 try {
                     return [].slice.call(arrLike);
                 } catch (e) {
@@ -1368,7 +1368,7 @@ const eUtils = __webpack_require__(1);
                 }
             },
             /**
-             * 判断是否为类数组
+             * Determine if it is an array-like object
              * @param o
              * @returns {boolean}
              */
@@ -1385,7 +1385,7 @@ const eUtils = __webpack_require__(1);
  
             },
             /**
-             * 判断数组是否包含对象
+             * Determine if an array contains objects
              * @param arr
              * @param obj
              */
@@ -1406,11 +1406,11 @@ const eUtils = __webpack_require__(1);
     factory('ObjectUtils', ['ArrayUtils', 'BaseUtils'], function (ArrayUtils, BaseUtils) {
         return {
             /**
-             * 获取对象属性[支持链式表达式,如获取学生所在班级所在的学校(student.class.school):'class.school']
+             * Retrieving object properties [Supports chained expressions, such as retrieving the school of a student's class](student.class.school):'class.school']
              * @param obj
-             * @param linkProperty {string|Array} 属性表达式，获取多个属性则用数组
+             * @param linkProperty {string|Array} Attribute expressions; use an array to retrieve multiple attributes.
              * @param cb {function=}
-             * @return 对象属性
+             * @return Object properties
              */
             readLinkProperty: function (obj, linkProperty, cb) {
                 var callback = null;
@@ -1418,13 +1418,13 @@ const eUtils = __webpack_require__(1);
                     callback = cb;
                 }
                 if (typeof linkProperty === 'string') {
-                    // 除去所有的空格
+                    // Remove all spaces
                     linkProperty = linkProperty.replace(/ /g, '');
-                    // 不判断为空的值
+                    // Values ​​not considered null
                     if (linkProperty === '') {
                         return null;
                     }
-                    // 若是以','隔开的伪数组，则转化为数组再进行操作
+                    // If it is a pseudo-array separated by commas, then convert it to an array before performing operations.
                     if (linkProperty.indexOf(',') !== -1) {
                         var propertyNameArr = linkProperty.split(',');
                         return this.readLinkProperty(obj, propertyNameArr, callback);
@@ -1441,7 +1441,7 @@ const eUtils = __webpack_require__(1);
                                     callback.call(_global, result, linkProperty);
                                 }
                             }
-                            // 终止对接下来的属性的遍历
+                            // Terminate the traversal of the next attribute.
                             if (typeof iterationObj === 'undefined') {
                                 return -1;
                             }
@@ -1456,7 +1456,7 @@ const eUtils = __webpack_require__(1);
                         normalResult = obj[linkProperty];
                     }
                     if (normalResult === null) {
-                        console.warn(obj, '的属性[\'' + linkProperty + '\']值未找到');
+                        console.warn(obj, 'Attributes[\'' + linkProperty + '\']value not found');
                     }
                     if (callback) {
                         callback.call(_global, normalResult, linkProperty);
@@ -1477,10 +1477,10 @@ const eUtils = __webpack_require__(1);
                 }
             },
             /**
-             * 为对象属性赋值
-             * （同一个对象中不能够既有数字开头的属性名和普通属性名）
+             * Assigning values ​​to object properties
+             * （An object cannot contain both property names that begin with a number and regular property names.）
              * @param obj
-             * @param linkProperty {string|Array} 属性表达式，多个属性则用数组
+             * @param linkProperty {string|Array} Attribute expressions; multiple attributes are expressed using an array.
              * @param value
              */
             createLinkProperty: function (obj, linkProperty, value) {
@@ -1488,11 +1488,11 @@ const eUtils = __webpack_require__(1);
                     obj = {};
                 }
                 if (typeof linkProperty === 'string') {
-                    // 除去所有的空格
+                    // Remove all spaces
                     linkProperty = linkProperty.replace(/ /g, '');
-                    // 不判断为空的值
+                    // Values ​​not considered null
                     if (linkProperty === '') {
-                        throw new TypeError('对象属性名不能为空')
+                        throw new TypeError('Object property names cannot be empty.')
                     }
                     if (linkProperty.indexOf(',') !== -1) {
                         var propertyNameArr = linkProperty.split(',');
@@ -1504,7 +1504,7 @@ const eUtils = __webpack_require__(1);
                         if (!obj.hasOwnProperty(names[0])) {
                             obj[names[0]] = {}
                         }
-                        // 判断属性名是否以数字开头（若是代表是一个数组）
+                        // Check if the attribute name starts with a number (if so, it means it's an array).
                         if (!Number.isNaN(parseInt(names[0]))) {
                             if (!ArrayUtils.isArrayObject(obj)) {
                                 obj = [];
@@ -1523,7 +1523,7 @@ const eUtils = __webpack_require__(1);
                         obj[names[0]] = this.createLinkProperty(propertyObj, newLinkProperty, value);
                         return obj;
                     }
-                    // 判断属性名是否以数字开头（若是代表是一个数组）
+                    // Check if the attribute name starts with a number (if so, it means it's an array).
                     if (!Number.isNaN(parseInt(linkProperty))) {
                         if (!ArrayUtils.isArrayObject(obj)) {
                             obj = [];
@@ -1539,16 +1539,16 @@ const eUtils = __webpack_require__(1);
                 }
             },
             /**
-             * 遍历对象属性
-             * @param context {object} 上下文
-             * @param obj {object} 遍历对象
-             * @param cb {function} 回调函数
-             * @param isReadInnerObject {boolean=} 是否遍历内部对象的属性
+             * Traversing object properties
+             * @param context {object} context
+             * @param obj {object} Traverse objects
+             * @param cb {function} callback function
+             * @param isReadInnerObject {boolean=} Does iterate over the properties of the internal object?
              */
             ergodicObject: function (context, obj, cb, isReadInnerObject) {
                 var keys = Object.keys(obj);
                 ArrayUtils.ergodicArrayObject(this, keys, function (propertyName) {
-                    // 若内部对象需要遍历
+                    // If the internal object needs to be traversed
                     var _propertyName = propertyName;
                     if (isReadInnerObject && obj[propertyName] !== null && typeof obj[propertyName] === 'object') {
                         this.ergodicObject(this, obj[propertyName], function (value, key) {
@@ -1560,29 +1560,29 @@ const eUtils = __webpack_require__(1);
                 })
             },
             /**
-             * 当指定属性为空或不存在时执行回到函数；
-             * @param context {object} 上下文
-             * @param obj {object} 检测对象
-             * @param propertyNames{Array|string} 需要检测的属性名
-             *                                     可以检查多级属性如:'a.b.c.e'，
-             *                                     多个属性使用数组，支持纯字符串多个属性用','隔开
-             * @param cb {function} 回调函数[参数：为空或不存在的属性名,返回值为'-1'时，跳过之后的回调函数]
+             * Execute the return function when the specified property is empty or does not exist.；
+             * @param context {object} context
+             * @param obj {object} Detection object
+             * @param propertyNames{Array|string} Attribute name to be detected
+             *                                     It can check multi-level attributes such as:'a.b.c.e'，
+             *                                     Multiple attributes can be used in an array; plain strings are also supported. Multiple attributes are separated by commas.
+             * @param cb {function} Callback function [parameter: empty or non-existent property name; if the return value is '-1', skip subsequent callback functions]
              */
             whileEmptyObjectProperty: function (context, obj, propertyNames, cb) {
-                // 解析单个属性名
+                // Parsing a single property name
                 if (typeof propertyNames === 'string') {
-                    // 除去所有的空格
+                    // Remove all spaces
                     propertyNames = propertyNames.replace(/ /g, '');
-                    // 不判断为空的值
+                    // Values ​​not considered null
                     if (propertyNames === '') {
                         return;
                     }
-                    // 若是以','隔开的伪数组，则转化为数组再进行操作
+                    // If it is a pseudo-array separated by commas, then convert it to an array before performing operations.
                     if (propertyNames.indexOf(',') !== -1) {
                         var propertyNameArr = propertyNames.split(',');
                         return this.whileEmptyObjectProperty(context, obj, propertyNameArr, cb);
                     }
-                    // 若指定级联属性
+                    // If a cascade property is specified
                     if (propertyNames.indexOf('.') !== -1) {
                         var names = propertyNames.split('.');
                         var iterationObj = obj;
@@ -1592,13 +1592,13 @@ const eUtils = __webpack_require__(1);
                                 iterationObj = iterationObj[name];
                             } else {
                                 result = cb.call(_global, propertyNames);
-                                // 终止对接下来的属性的遍历
+                                // Terminate the traversal of the next attribute.
                                 return -1;
                             }
                         });
                         return result;
                     }
-                    // 正常流程
+                    // normal process
                     if (!obj.hasOwnProperty(propertyNames)) {
                         return cb.call(context, propertyNames);
                     }
@@ -1606,10 +1606,10 @@ const eUtils = __webpack_require__(1);
                         return cb.call(context, propertyNames);
                     }
                 } else if (BaseUtils.isArray(propertyNames)) {
-                    // 解析数组
+                    // parse array
                     var _this = this;
                     ArrayUtils.ergodicArrayObject(this, propertyNames, function (propertyName) {
-                        // 递归调用
+                        // recursive call
                         return _this.whileEmptyObjectProperty(context, obj, propertyName, cb);
                     })
                 }
@@ -1622,12 +1622,12 @@ const eUtils = __webpack_require__(1);
                 })
             },
             /**
-             * 克隆对象[只克隆属性，不克隆原型链]
+             * Clone an object [clone only properties, not the prototype chain].
              * @param obj {*}
              */
             cloneObject: function (obj) {
                 var newObj = {};
-                // 判断是否为基本数据类型，若是则直接返回
+                // Check if it is a basic data type; if so, return directly.
                 if (typeof obj === 'string' ||
                     typeof obj === 'number' ||
                     typeof obj === 'undefined' ||
@@ -1635,20 +1635,20 @@ const eUtils = __webpack_require__(1);
                     typeof obj === 'boolean') {
                     return obj;
                 }
-                // 判断是否是数组
+                // Determine if it is an array
                 if (BaseUtils.isArray(obj)) {
                     newObj = [];
-                    // 遍历数组并递归调用该方法获取数组内部对象的克隆对象并push到新数组
+                    // Iterate through the array and recursively call the method to obtain clones of the objects inside the array and push them into the new array.
                     ArrayUtils.ergodicArrayObject(this, obj, function (arrObjValue) {
                         newObj.push(this.cloneObject(arrObjValue));
                     })
                 } else if (typeof obj === 'object') {
-                    // 当目标为一般对象时即 typeof 为 object
+                    // When the target is a general object, i.e., typeof is object.
                     if (obj === null) {
-                        // 当克隆对象为空时，返回空
+                        // Returns null if the cloned object is null.
                         return null;
                     }
-                    // 遍历对象的属性并调用递归方法获得该属性对应的对象的克隆对象并将其重新赋值到该属性
+                    // Iterate through the properties of an object and call the recursive method to obtain a clone of the object corresponding to that property and reassign it to that property.
                     this.ergodicObject(this, obj, function (value, key) {
                         newObj[key] = this.cloneObject(value);
                     });
@@ -1656,7 +1656,7 @@ const eUtils = __webpack_require__(1);
                 return newObj;
             },
             /**
-             * 获取对象的哈希码
+             * Get the hash code of the object
              * @param obj {Object}
              * @returns {number}
              */
@@ -1676,11 +1676,11 @@ const eUtils = __webpack_require__(1);
                 return hash;
             },
             /**
-             * 扩展对象属性
-             * @param obj 原对象
-             * @param extendedObj 被扩展的对象
-             * @param isCover {boolean=} 扩展的属性和原来属性冲突时是否覆盖 默认[false]
-             * @param isClone {boolean=} 是否返回一个新的对象，默认[false]返回扩展后的原对象
+             * Extended object properties
+             * @param obj original object
+             * @param extendedObj extended object
+             * @param isCover {boolean=} Whether to overwrite an extended property when it conflicts with the original property. Default: [false]
+             * @param isClone {boolean=} Whether to return a new object; the default is [false], which returns the expanded original object.
              */
             expandObject: function (obj, extendedObj, isCover, isClone) {
                 var resultObj = obj;
@@ -1696,18 +1696,18 @@ const eUtils = __webpack_require__(1);
                 return resultObj;
             },
             /**
-             * 为数组排序，当数组中的元素为对象时，根据指定对象的属性名进行排序
-             * @param arr 数组
-             * @param propertyName 属性名（当有多个属性名时，为多级排序）
-             * @param order 升降序
+             * Sort an array, and when the elements in the array are objects, sort them according to the property names of the specified objects.
+             * @param arr array
+             * @param propertyName Attribute names (multi-level sorting when there are multiple attribute names)
+             * @param order Ascending and descending order
              * @returns {*}
              */
             sortingArrayByProperty: function (arr, propertyName, order) {
                 var _this = this;
                 var sortSetting = {
-                    // 是否创建新数据
+                    // Whether to create new data
                     createNewData: false,
-                    // 通过该方法获取数组中每个对象中用来比较的属性
+                    // This method retrieves the comparison property from each object in the array.
                     getComparedProperty: function (arr) {
                         var compareArr = [];
                         ArrayUtils.ergodicArrayObject(_this, arr, function (obj, i) {
@@ -1728,9 +1728,9 @@ const eUtils = __webpack_require__(1);
                 return ArrayUtils.sortingArrays(arr, order, sortSetting);
             },
             /**
-             * 转话为目标的实例
-             * @param constructor {function} 构造函数
-             * @param obj {object|Array}判断的对象
+             * Examples of turning conversation into a target
+             * @param constructor {function} Constructor
+             * @param obj {object|Array}object of judgment
              * @param defaultProperty {object=}
              */
             toAimObject: function (obj, constructor, defaultProperty) {
@@ -1760,7 +1760,7 @@ const eUtils = __webpack_require__(1);
                 }
             },
             /**
-             * 将数组中结构类似对象指定属性融合为一个数组
+             * Merge objects with similar structures in an array into a single array by specifying their properties.
              * @param arr {Array}
              * @param propertyNames
              */
@@ -1768,7 +1768,7 @@ const eUtils = __webpack_require__(1);
                 var result = {};
                 var temp = {};
                 ArrayUtils.ergodicArrayObject(this, arr, function (obj) {
-                    // 获取想要得到的所有属性，以属性名为键值存储到temp中
+                    // Retrieve all desired properties and store them in temp using property names as key-value pairs.
                     this.readLinkProperty(obj, propertyNames, function (value, property) {
                         if (!temp.hasOwnProperty(property) || !(BaseUtils.isArray(temp[property]))) {
                             temp[property] = [];
@@ -1776,21 +1776,21 @@ const eUtils = __webpack_require__(1);
                         temp[property].push(value);
                     });
                 });
-                // 遍历temp获取每个键值中的值，并单独取出
+                // Iterate through temp to get the value of each key and extract it individually.
                 this.ergodicObject(this, temp, function (value, key) {
                     result = this.createLinkProperty(result, key, value);
                 });
                 return this.cloneObject(result);
             },
             /**
-             * 将数组中结构类似对象指定属性融合为一个数组
+             * Merge objects with similar structures in an array into a single array by specifying their properties.
              * @param arr {Array}
              */
             parseTheSameObjectAllPropertyInArray: function (arr) {
                 if (!ArrayUtils.isArrayObject(arr) || arr.length < 1) {
                     return;
                 }
-                // 获取一个对象的所有属性，包括内部对象的属性
+                // Retrieve all properties of an object, including properties of its internal objects.
                 var propertyNames = [];
                 this.ergodicObject(this, arr[0], function (v, k) {
                     propertyNames.push(k);
@@ -1798,7 +1798,7 @@ const eUtils = __webpack_require__(1);
                 return this.parseTheSameObjectPropertyInArray(arr, propertyNames);
             },
             /**
-             * 获取对象属性，若为数组则计算其中数字的平均值或其它
+             * Get object properties; if it's an array, calculate the average of its numbers or other properties.
              * @param obj
              * @param propertyNames{Array<string>|string}
              * @param type
@@ -1832,7 +1832,7 @@ const eUtils = __webpack_require__(1);
     factory('ColorUtils', [], function () {
         return {
             /**
-             * 转换颜色rgb为16进制
+             * Convert RGB color to hexadecimal
              * @param r
              * @param g
              * @param b
@@ -1843,7 +1843,7 @@ const eUtils = __webpack_require__(1);
                 return "#" + new Array(Math.abs(hex.length - 7)).join("0") + hex;
             },
             /**
-             * 转换颜色16进制为rgb
+             * Convert color from hexadecimal to RGB
              * @param hex
              * @return {Array}
              */
@@ -1867,7 +1867,7 @@ const eUtils = __webpack_require__(1);
                 }
             },
             /**
-             * 根据两个颜色以及之间的百分比获取渐进色
+             * Obtain the gradient color based on the two colors and the percentage between them.
              * @param start
              * @param end
              * @param percentage
@@ -1894,7 +1894,7 @@ const eUtils = __webpack_require__(1);
     factory('FunctionUtils', [], function () {
         return {
             /**
-             * 获取方法的名字
+             * Get the name of the method
              * @param func
              * @returns {*}
              */
@@ -1916,7 +1916,7 @@ const eUtils = __webpack_require__(1);
                 }
             },
             /**
-             * 通过方法的arguments获取调用该方法的函数
+             * Get the function that called the method through the method's arguments.
              * @param func_arguments
              * @returns {string}
              */
