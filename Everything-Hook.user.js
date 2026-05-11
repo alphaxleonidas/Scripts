@@ -1905,7 +1905,7 @@ const eUtils = __webpack_require__(1);
                 return func.name || name[1];
             },
             /**
-             * 获取方法的参数名
+             * Get the parameter name of the method
              * @param func
              * @returns {*}
              */
@@ -2045,7 +2045,7 @@ const eUtils = __webpack_require__(1);
         Point2D.prototype = {
             constructor: Point2D,
             /**
-             * 获取指定距离和角度对应的平面点
+             * Get the plane point corresponding to a specified distance and angle
              * @param distance
              * @param deg
              */
@@ -2057,7 +2057,7 @@ const eUtils = __webpack_require__(1);
                 return point;
             },
             /**
-             * 获取当前平面点与另一个平面点之间的距离
+             * Get the distance between the current plane point and another plane point.
              * @param p
              * @returns {number}
              */
@@ -2065,7 +2065,7 @@ const eUtils = __webpack_require__(1);
                 return Math.sqrt((this.x - p.x) * (this.x - p.x) + (this.y - p.y) * (this.y - p.y));
             },
             /**
-             * 获取当前平面点与另一个平面点之间的角度
+             * Get the angle between the current plane point and another plane point.
              * @param p
              * @returns {number}
              */
@@ -2076,11 +2076,11 @@ const eUtils = __webpack_require__(1);
                 return 180 - deg;
             },
             /**
-             * 判断该点是否位于一矩形内部
-             * @param x 矩形开始坐标x
-             * @param y 矩形开始坐标y
-             * @param width 矩形宽
-             * @param height 矩形长
+             * Determine if the point is inside a rectangle.
+             * @param x The starting coordinates of the rectangle are x
+             * @param y The starting coordinate of the rectangle is y.
+             * @param width Rectangle width
+             * @param height Rectangle length
              * @returns {boolean}
              */
             isInRect: function (x, y, width, height) {
